@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+int main() {
+    int count, num, sum, temp;
+
+    printf("Enter how many numbers you want to input: ");
+    scanf("%d", &count);
+
+    for (int i = 0; i < count; i++) {
+        printf("Enter number %d: ", i + 1);
+        scanf("%d", &num);
+
+        sum = 0;
+        temp = num;
+        
+        while (temp) {
+            sum += temp % 10;
+            temp /= 10;
+        }
+
+        printf("Sum of digits of %d: %d\n", num, sum);
+    }
+
+    return 0;
+}
