@@ -1,0 +1,115 @@
+#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+#define MAX 20
+#define INF 999
+
+int dist[MAX]; /* Array to store Min Distance */
+int visited[MAX]; /* Array to keep track of visited nodes */
+int path[MAX]; /* Array to keep track of shortest path from source node to all
+other nodes */
+int source;
+
+void dijkstra(int n, int graph[MAX][MAX]);
+int minDistance(int n);
+void printShortest(int n);
+void printPath(int path[], int j);
+
+int main() {
+int n, i, j;
+int graph[MAX][MAX]; /* 2D-array to read the values of weighted graph */
+
+printf(&quot;Enter the number of nodes: &quot;);
+scanf(&quot;%d&quot;, &amp;n);
+
+printf(&quot;Enter the weight matrix:\n&quot;);
+for (i = 1; i &lt;= n; i++) {
+for (j = 1; j &lt;= n; j++) {
+scanf(&quot;%d&quot;, &amp;graph[i][j]);
+}
+}
+
+printf(&quot;Enter the source vertex: &quot;);
+scanf(&quot;%d&quot;, &amp;source);
+
+dijkstra(n, graph);
+printShortest(n);
+
+return 0;
+}
+
+void dijkstra(int n, int graph[MAX][MAX]) {
+int i, u, v;
+
+/* Initially set all the nodes as unvisited */
+for (i = 1; i &lt;= n; i++) {
+visited[i] = 0;
+}
+
+/* Set the source node as visited */
+visited[source] = 1;
+
+for (i = 1; i &lt;= n; i++) {
+dist[i] = graph[source][i];
+}
+
+/* Initially set the shortest path from source node to all other nodes through
+source */
+for (i = 1; i &lt;= n; i++) {
+path[i] = source;
+}
+
+/* Set the shortest path to the source node as -1 */
+path[source] = -1;
+
+for (i = 1; i &lt; n; i++) {
+
+u = minDistance(n);
+visited[u] = 1;
+
+for (v = 1; v &lt;= n; v++) {
+if (!visited[v] &amp;&amp; graph[u][v] &amp;&amp; dist[u] != INF &amp;&amp; dist[u] + graph[u][v] &lt;
+dist[v]) {
+dist[v] = dist[u] + graph[u][v];
+path[v] = u;
+}
+}
+}
+}
+
+int minDistance(int n) {
+int min = INF, minIndex = -1, i;
+
+for (i = 1; i &lt;= n; i++) {
+if (visited[i]==0 &amp;&amp; dist[i] &lt;= min) {
+min = dist[i];
+minIndex = i;
+}
+}
+
+return minIndex;
+}
+
+void printShortest(int n) {
+int i;
+
+for (i = 1; i &lt;= n; i++) {
+if (i != source) {
+printf(&quot;The shortest distance from node %d to %d = %d\n&quot;, source, i,
+dist[i]);
+printf(&quot;The shortest path from node %d to %d is: &quot;, source, i);
+printf(&quot;%d&quot;, source);
+printPath(path, i);
+printf(&quot;\n&quot;);
+}
+}
+}
+
+void printPath(int path[], int j) {
+if (path[j] == -1) {
+return;
+
+}
+
+printPath(path, path[j]);
+printf(&quot; ---&gt; %d&quot;, j);
+}
